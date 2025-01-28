@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Departments</title>
+    <link rel="stylesheet" href="stylesheet.css">
+
+</head>
+<body>
+
+    <div class="innerBody">
+
+        <div class="subHeadingDiv">
+            <h1 class="caption">List of all in invigilators</h1>
+            <button class="addButton" onclick="openCreateDialog()">Add new invigilator</button>
+        </div>
+
+    <table class="table">
+
+            <colgroup>
+                <col class="column" />
+                <col class="column" />
+                <col class="column" />
+                <col class="column" />
+                <col class="column" />
+                <col class="column" />
+                <col class="column" />
+            </colgroup>
+
+            <thead class="tableRow">
+            <tr>
+                <th class="tableHeader" style="width: 0"></th>
+                <th class="tableHeader" style="width: 40%">Name</th>
+                <th class="tableHeader" style="width: 30%">Surname</th>
+                <th class="tableHeader" style="width: 10%">Title</th>
+                <th class="tableHeader" style="width: 20%">Department</th>
+                <th class="tableHeader" style="width: 20%">Email</th>
+                <th class="tableHeader" style="width: 0">Action</th>
+            </tr>
+
+            </thead>
+            <tbody>
+                <tr class="tableRow" th:each="invigilator: ${invigilators}" >
+                    <td th:text="${invigilator.id}" class="tableText"></td>
+                    <td th:text="${invigilator.name}" class="tableText"></td>
+                    <td th:text="${invigilator.surname}" class="tableText"></td>
+                    <td th:text="${invigilator.title}" class="tableText"></td>
+                    <td th:text="${invigilator.department}" class="tableText"></td>
+                    <td th:text="${invigilator.email}" class="tableText"></td>
+                    <td class="tableBox">
+
+                        <a href="#"
+                           th:data-name="${invigilator.name}"
+                           th:data-surname="${invigilator.surname}"
+                           th:data-title="${invigilator.title}"
+                           th:data-department="${invigilator.department}"
+                           th:data-email="${invigilator.email}"
+                           th:onclick="|openEditDialog(${invigilator.id},this.getAttribute('data-name'),this.getAttribute('data-surname'),this.getAttribute('data-title'),this.getAttribute('data-department'),this.getAttribute('data-email'))|"
+                           target="frame"
+                           class="optionLink">
+                            <div class="action">
+                                <img src="/svg/edit_icon.svg">
+                                <h1>Edit</h1>
+                            </div>
+                        </a>
+
+
+
+                        <a th:href="|http://localhost:8080/invigilators/delete/${invigilator.id}|"
+                           target="frame"
+                           class="optionLink">
+                            <div class="actionDelete">
+                                <img src="/svg/delete_icon.svg">
+                            </div>
+                        </a>
+
+                    </td>
+                </tr>
+            </tbody>
+    </table>
+    <dialog id="dialog" class="dialog" style="visibility: collapse">
+
+        <form name="submitForm" id="submitForm" class="form" method="post">
+
+            <h1 class="formHeader">Create new invigilator</h1>
+            <label class="label" for="name">Name</label>
+            <input class="formInput" type="text" id="name" name="name" required><br><br>
+            <label  class="label" for="surname">Surname</label>
+            <input  class="formInput"  type="text" id="surname" name="surname" required><br><br>
+            <label class="label" for="title">Title</label>
+            <input class="formInput" type="text" id="title" name="title" required><br><br>
+            <label class="label" for="email">Email</label>
+            <input class="formInput" type="email" id="email" name="email" required><br><br>
+            <input  class="formInput"  type="hidden" id="department" name="department" th:value="${defaultID}" required>
+
+            <label  class="label" for="dept">Department</label>
+            <select onchange="setInput()" id="dept" class="selectInput">
+                <option th:each="department:${departments}" th:value="${department.id}" th:text="${department.name}"></option>
+            </select>
+    
+            <div class="dialogDiv">
+                <a href="http://localhost:8080/invigilators">
+                    <button class="outlineButton" type="button">Cancel</button>
+                </a>
+                <input  style="grid-column: 2" class="button" type="submit" value="Submit">
+            </div>
+    
+    
+        </form>
+
+
+    </dialog>
+
+    </div>
+
+<script>
+
+    function openEditDialog(id,name,surname,title,department,email){
+
+        if(document.getElementById('department').value!=="") {
+            document.submitForm.action="http://localhost:8080/invigilators/update/" + id;
+            document.getElementById('name').value=name;
+            document.getElementById('surname').value=surname;
+            document.getElementById('title').value=title;
+            document.getElementById('email').value=email;
+            for(let i=0; i<document.getElementById('dept').options.length; i++){
+                if(document.getElementById('dept').options[i].text===department){
+                    document.getElementById('dept').selectedIndex=i;
+                    break;
+                }
+            }
+            document.getElementById('dialog').style.visibility='visible';
+        }else{
+            alert("You need to create at least 1 department before creating invigilators");
+        }
+
+    }
+
+    function openCreateDialog(){
+        if(document.getElementById('department').value!=="") {
+            document.submitForm.action="http://localhost:8080/invigilators/add_invigilator";
+            document.getElementById('dialog').style.visibility='visible';
+        }else{
+            alert("You need to create at least 1 department before creating invigilators");
+        }
+
+    }
+
+    function setInput(){
+        document.getElementById('department').value=document.getElementById('dept').value;
+    }
+
+</script>
+</body>
+</html>

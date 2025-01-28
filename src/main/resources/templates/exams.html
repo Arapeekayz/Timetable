@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exams</title>
+    <style>
+
+        .innerBody {
+            width: 100%;
+            height: 100%;
+            display: grid;
+            grid-template-rows: max-content auto;
+            padding: 0px;
+        }
+
+
+        .optionLink {
+            text-decoration: none;
+        }
+
+
+        .tableHeader {
+            font-family: sans-serif;
+            font-size: 12px;
+            padding: 8px 16px;
+            margin: 8px;
+            text-align: start;
+            color: #505050;
+            font-weight: 200;
+        }
+
+        .tableText {
+            font-family: sans-serif;
+            font-size: 14px;
+            padding: 8px 16px
+        }
+
+        .tableRow {
+            border-bottom: #ddd solid 1px;
+            padding: 8px;
+
+        }
+
+        .tableRow:Hover {
+            background: #f8f8f8;
+        }
+
+        .tableBox {
+            display: inline-flex;
+            padding: 8px 16px;
+            width: max-content;
+        }
+
+        .label {
+            font-family: sans-serif;
+            font-size: 10px;
+            width: 100%;
+            color: #252525;
+        }
+
+
+        .form {
+            justify-self: center;
+            align-self: center;
+            width: 50vw;
+            max-width: 400px;
+            background-color: white;
+            padding: 40px 80px;
+            border-radius: 40px;
+        }
+
+        .formHeader {
+            width: 100%;
+            margin-bottom: 40px;
+            font-size: 20px;
+            font-weight: 600;
+            font-family: sans-serif;
+            text-align: center;
+        }
+
+        .formInput {
+            border-width: 1px;
+            border-color: #aaa;
+            width: calc(100% - 16px);
+            margin: 0;
+            border-style: solid;
+            padding: 6px 8px;
+            font-family: sans-serif;
+        }
+
+        .selectInput {
+            border-width: 1px;
+            border-color: #aaa;
+            width: 100%;
+            margin: 0 0 16px 0;
+            border-style: solid;
+            padding: 6px 8px;
+            font-family: sans-serif;
+        }
+
+
+        .dialog {
+            width: 100%;
+            height: 95%;
+            position: absolute;
+            top: 0;
+            background: #00000040;
+            border-width: 0;
+            border-radius: 0;
+            display: flex;
+            justify-content: center;
+
+        }
+
+        .dialogDiv {
+            display: grid;
+            width: 100%;
+            height: max-content;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            grid-template-columns: 50% 50%;
+        }
+
+        .button {
+            background-color: #252525;
+            font-family: sans-serif;
+            width: 90%;
+            color: white;
+            padding: 8px;
+            font-size: 12px;
+            margin-left: 10%;
+            align-self: end;
+            transition: 600ms;
+            border-color: transparent;
+        }
+
+        .button:hover {
+            background-color: #808080;
+            border-radius: 4px;
+        }
+
+        .outlineButton {
+            background-color: transparent;
+            border-width: 1px;
+            align-self: start;
+            border-color: #252525;
+            font-family: sans-serif;
+            font-size: 12px;
+            width: 90%;
+            color: #252525;
+            padding: 8px;
+            transition: 600ms;
+        }
+
+        .outlineButton:hover {
+            background-color: #808080;
+            border-color: transparent;
+            color: white;
+            border-radius: 4px;
+        }
+
+        .table {
+            border-collapse: collapse;
+            width: calc(100% - 40px);
+            height: max-content;
+            justify-self: center;
+
+        }
+
+        .column {
+            border: 1px solid #ddd;
+        }
+
+        .subHeadingDiv {
+            display: grid;
+            width: 100%;
+            height: max-content;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            grid-template-columns: 50% 50%;
+            justify-content: center;
+        }
+
+
+        .dropbtn {
+            padding: 8px;
+            border-color: transparent;
+            border-width: 1px;
+            border-style: solid;
+            background-color: white;
+            width: 16px;
+            height: 16px;
+            justify-self: end;
+        }
+
+        .dropdown {
+            position: relative;
+            display: grid;
+            grid-template-rows: max-content max-content;
+            width: 200px;
+            margin: 0 24px;
+            justify-self: end;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            z-index: 1;
+            width: 99.5%;
+            margin-top: 2px;
+            grid-row: 2;
+            border-width: 1px;
+            border-color: #cccccc;
+            border-style: solid;
+            background-color: white;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown:hover .dropbtn {
+
+            border-color: #cccccc;
+        }
+
+
+        .dropDownItem {
+            display: flex;
+            transition: 300ms;
+            padding: 8px;
+            margin-top: 1px;
+            margin-bottom: 1px;
+        }
+
+
+        .dropDownItem:hover {
+            background-color: #252525;
+            color: white;
+        }
+
+        .dropDownItem button {
+            border-color: transparent;
+            background-color: transparent;
+            font-size: 14px;
+            color: #252525;
+            font-family: sans-serif;
+            font-weight: 200;
+            text-align: start;
+            justify-self: center;
+        }
+
+        .dropDownItem:hover > button {
+            color: white;
+        }
+
+        .dropDownItem img {
+            width: 16px;
+            height: 16px;
+            justify-self: center;
+            align-self: center;
+        }
+
+        .dropDownItem:hover > img {
+            filter: invert(1);
+        }
+
+
+        .error h1 {
+            font-family: sans-serif;
+            width: 100%;
+            text-align: center;
+            font-weight: 600;
+            font-size: 16px;
+            color: #252525;
+        }
+
+        .error h2 {
+            font-family: sans-serif;
+            font-size: 12px;
+            text-align: center;
+            color: #a0a0a0;
+            font-weight: 200;
+        }
+
+        .error img {
+            width: 100%;
+            height: 64px;
+        }
+
+        .error p {
+            font-family: sans-serif;
+            font-size: 14px;
+            text-align: center;
+            color: #505050;
+        }
+
+        .error div {
+            display: grid;
+            width: 100%;
+            height: max-content;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+
+        .error button {
+            background-color: #252525;
+            font-family: sans-serif;
+            width: 250px;
+            color: white;
+            padding: 8px;
+            font-size: 12px;
+        }
+
+
+        .action {
+            display: inline-flex;
+            border-radius: 4px;
+            background-color: #eaeaea;
+            padding: 0 16px;
+            transition: 600ms;
+        }
+
+        .action img {
+            width: 16px;
+            height: 16px;
+            align-self: center;
+            margin-right: 8px;
+        }
+
+        .action h1 {
+            font-family: sans-serif;
+            font-size: 12px;
+            text-align: center;
+            font-weight: 600;
+            color: #252525;
+            width: max-content;
+
+        }
+
+        .action:hover {
+            border-radius: 16px;
+            background-color: #505050;
+            padding: 0px 16px;
+        }
+
+        .action:hover > h1 {
+            color: white;
+        }
+
+
+        .action:hover > img {
+            filter: invert(1);
+        }
+
+
+        .actionDelete {
+            display: inline-flex;
+            border-radius: 4px;
+            background-color: #eaeaea;
+            padding: 7px;
+            margin-left: 16px;
+            transition: 600ms;
+        }
+
+        .actionDelete img {
+            width: 16px;
+            height: 16px;
+            align-self: center;
+        }
+
+        .actionDelete:hover {
+            border-radius: 16px;
+            background-color: #cc0000;
+        }
+
+        .actionDelete:hover > img {
+            filter: invert(1);
+        }
+
+
+        .uploadDiv {
+            display: inline-flex;
+            margin-left: 20px;
+        }
+
+
+        .upload {
+            display: inline-flex;
+            background-color: transparent;
+            border-radius: 0px 0 0 0px;
+            border-width: 1px 0 1px 1px;
+            border-color: #ddd;
+            border-style: solid;
+            height: 32px;
+            padding: 0 16px;
+            transition: 600ms;
+            width: max-content;
+        }
+
+        .upload label {
+            border: none;
+            width: 120px;
+            font-size: 12px;
+            align-self: center;
+            color: #252525;
+            font-family: sans-serif;
+        }
+
+        .uploadButton {
+            padding: 8px;
+            border-radius: 0 0px 0px 0;
+            background-color: #252525;
+            color: white;
+            padding-left: 16px;
+            padding-right: 16px;
+            font-weight: 400;
+            border: none;
+            outline: none;
+            transition: 600ms;
+        }
+
+        .uploadButton:hover {
+            background-color: #505050;
+        }
+    </style>
+
+</head>
+<body>
+
+<div class="innerBody">
+
+    <div class="subHeadingDiv">
+
+        <form class="uploadDiv" action="http://localhost:8080/exams/uploadPDF" enctype="multipart/form-data"
+              method="post">
+            <div class="upload">
+                <label for="file" id="fileLabel">Select file to upload</label>
+                <input type="file" placeholder="Select file" name="file" id="file" multiple onchange="changeFileText()" style="display: none;" >
+            </div>
+            <input type="submit" value="Upload" class="uploadButton">
+        </form>
+
+        <div class="dropdown">
+            <img src="/svg/more_icon.svg" class="dropbtn">
+            <div class="dropdown-content">
+                <div class="dropDownItem" onclick="openCreateDialog()">
+                    <img src="/svg/exams_icon.svg">
+                    <button>Add new exam</button>
+                </div>
+                <div class="dropDownItem" onclick="openSettingsDialog()">
+                    <img src="/svg/generate_icon.svg">
+                    <button>Assign staff</button>
+                </div>
+
+                <a href="http://localhost:8080/generate_pdf"
+                   class="optionLink">
+                    <div class="dropDownItem">
+                        <img src="/svg/pdf_icon.svg">
+                        <button>Download as pdf</button>
+                    </div>
+                </a>
+                <div class="dropDownItem"
+                     th:data-emails="${emails}"
+                     th:onclick="|getEmails(this.getAttribute('data-emails'))|">
+                    <img src="/svg/clipboard_icon.svg">
+                    <button>Copy emails to clipboard</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <table class="table">
+
+        <colgroup>
+            <col class="column"/>
+            <col class="column"/>
+            <col class="column"/>
+            <col class="column"/>
+            <col class="column"/>
+            <col class="column"/>
+            <col class="column"/>
+            <col class="column"/>
+            <col class="column"/>
+            <col class="column"/>
+            <col class="column"/>
+        </colgroup>
+
+        <thead class="tableRow">
+        <tr>
+            <th class="tableHeader">Date</th>
+            <th class="tableHeader">Time</th>
+            <th class="tableHeader">Course code</th>
+            <th class="tableHeader">Course Narration</th>
+            <th class="tableHeader">Duration</th>
+            <th class="tableHeader">Number of students</th>
+            <th class="tableHeader">Venue</th>
+            <th class="tableHeader">Examiner</th>
+            <th class="tableHeader">Invigilators</th>
+            <th class="tableHeader">In attendance</th>
+            <th class="tableHeader">Actions</th>
+        </tr>
+
+        </thead>
+        <tbody>
+        <tr class="tableRow" th:each="timetableEntity: ${timetableEntities}">
+            <td th:text="${timetableEntity.date}" class="tableText"></td>
+            <td th:text="${timetableEntity.time}" class="tableText"></td>
+            <td th:text="${timetableEntity.course}" class="tableText"></td>
+            <td th:text="${timetableEntity.courseNarration}" class="tableText"></td>
+            <td th:text="${timetableEntity.duration}" class="tableText"></td>
+            <td th:text="${timetableEntity.numOfStudents}" class="tableText"></td>
+            <td th:text="${timetableEntity.venue}" class="tableText"></td>
+            <td th:text="${timetableEntity.examiner}" class="tableText"></td>
+            <td th:text="${timetableEntity.invigilator}" class="tableText"></td>
+            <td th:text="${timetableEntity.inAttendance}" class="tableText"></td>
+            <td class="tableBox">
+
+                <a href="#"
+                   th:data-date="${timetableEntity.date}"
+                   th:data-time="${timetableEntity.time}"
+                   th:data-course="${timetableEntity.course}"
+                   th:data-courseNarration="${timetableEntity.courseNarration}"
+                   th:data-duration="${timetableEntity.duration}"
+                   th:data-numOfStudents="${timetableEntity.numOfStudents}"
+                   th:data-venue="${timetableEntity.venue}"
+                   th:data-examiner="${timetableEntity.examiner}"
+                   th:data-examID="${timetableEntity.examID}"
+                   th:onclick="|openEditDialog(this.getAttribute('data-date'),this.getAttribute('data-time'),this.getAttribute('data-course'),this.getAttribute('data-courseNarration'),this.getAttribute('data-duration'),this.getAttribute('data-numOfStudents'),this.getAttribute('data-venue'),this.getAttribute('data-venue'))|"
+                   target="frame"
+                   class="optionLink">
+                    <div class="action">
+                        <img src="/svg/edit_icon.svg">
+                        <h1>Edit</h1>
+                    </div>
+                </a>
+
+
+                <a th:href="|http://localhost:8080/exams/delete/${timetableEntity.examID}|"
+                   target="frame"
+                   class="optionLink">
+                    <div class="actionDelete">
+                        <img src="/svg/delete_icon.svg">
+                    </div>
+                </a>
+
+            </td>
+
+
+        </tr>
+        </tbody>
+    </table>
+    <dialog id="dialog" class="dialog" style="visibility: collapse">
+
+        <form name="submitForm" id="submitForm" class="form" method="post">
+
+            <h1 class="formHeader">Create new exam</h1>
+
+            <input class="formInput" type="hidden" id="courseID" name="courseID" th:value="${defaultCourse}" required>
+
+            <label class="label" for="course">Course</label>
+            <select onchange="setCourse()" id="course" class="selectInput">
+                <option th:each="course:${courses}" th:value="${course.id}" th:text="${course.name}"></option>
+            </select>
+
+            <label class="label" for="numOfStudents">number of students</label>
+            <input class="formInput" type="number" id="numOfStudents" name="numOfStudents" min="1" required><br><br>
+
+            <label class="label" for="date">date</label>
+            <input class="formInput" type="date" id="date" name="date" required><br><br>
+
+            <label class="label" for="time">time</label>
+            <input class="formInput" type="time" id="time" name="time" required><br><br>
+
+            <input class="formInput" type="hidden" id="administrator" name="administrator"
+                   th:value="${defaultAdministrator}" required>
+
+            <label class="label" for="admin">Administrator</label>
+            <select onchange="setAdministrator()" id="admin" class="selectInput">
+                <option th:each="administrator:${administrators}" th:value="${administrator.id}"
+                        th:text="${administrator.name}"></option>
+            </select>
+
+            <input class="formInput" type="hidden" id="venue" name="venue" th:value="${defaultVenue}" required>
+
+            <label class="label" for="ven">Venue</label>
+            <select onchange="setVenue()" id="ven" class="selectInput">
+                <option th:each="venue:${venues}" th:value="${venue.id}" th:text="${venue.name}"></option>
+            </select>
+
+            <div class="dialogDiv">
+                <a href="http://localhost:8080/exams">
+                    <button class="outlineButton" type="button">Cancel</button>
+                </a>
+                <input style="grid-column: 2" class="button" type="submit" value="Submit">
+            </div>
+
+        </form>
+
+
+    </dialog>
+
+    <dialog id="mDialog" class="dialog" style="visibility: collapse">
+
+
+        <form class="form" action="http://localhost:8080/assign_staff" method="post">
+
+            <h1 class="formHeader">Application settings</h1>
+            <label class="label" for="maxInvigilators">Max number of students per invigilator</label>
+            <input class="formInput" type="number" id="maxInvigilators" name="maxInvigilators" value="30"
+                   required><br><br>
+            <label class="label" for="maxInAttendance">Max number of students per in attendance staff</label>
+            <input class="formInput" type="number" id="maxInAttendance" name="maxInAttendance" value="30"
+                   required><br><br>
+            <div class="dialogDiv">
+                <a href="http://localhost:8080/exams">
+                    <button class="outlineButton" type="button">Cancel</button>
+                </a>
+                <input style="grid-column: 2" class="button" type="submit" value="Submit">
+            </div>
+        </form>
+
+
+    </dialog>
+
+</div>
+
+<script>
+
+    window.history.forward();
+
+    function openEditDialog(id, course, numOfStudents, date, time, administrator, venue) {
+
+        if (document.getElementById('courseID').value === "") {
+            alert("You need to create at least 1 course before creating an exam");
+        } else if (document.getElementById('venue').value === "") {
+            alert("You need to create at least 1 venue before creating an exam");
+        } else if (document.getElementById('administrator').value === "") {
+            alert("You need to create at least 1 administrator before creating an exam");
+        } else {
+            document.submitForm.action = "http://localhost:8080/exams/update/" + id;
+            document.getElementById('numOfStudents').value = numOfStudents;
+            document.getElementById('date').value = date;
+            document.getElementById('time').value = time;
+            for (let i = 0; i < document.getElementById('course').options.length; i++) {
+                if (document.getElementById('course').options[i].text === course) {
+                    document.getElementById('course').selectedIndex = i;
+                    break;
+                }
+            }
+            for (let i = 0; i < document.getElementById('admin').options.length; i++) {
+                if (document.getElementById('admin').options[i].text === administrator) {
+                    document.getElementById('admin').selectedIndex = i;
+                    break;
+                }
+            }
+            for (let i = 0; i < document.getElementById('ven').options.length; i++) {
+                if (document.getElementById('ven').options[i].text === venue) {
+                    document.getElementById('ven').selectedIndex = i;
+                    break;
+                }
+            }
+            document.getElementById('dialog').style.visibility = 'visible';
+        }
+
+    }
+
+    function openSettingsDialog() {
+        document.getElementById('mDialog').style.visibility = 'visible';
+    }
+
+
+    function setType() {
+        document.getElementById('type').value = document.getElementById('types').value;
+    }
+
+
+    function getEmails(emails) {
+        navigator.clipboard.writeText(emails);
+
+        alert("Emails copied to clipboard");
+    }
+
+    function changeFileText () {
+
+        document.getElementById('fileLabel').innerHTML=document.getElementById('file').files.item(0).name;
+
+    };
+
+</script>
+</body>
+</html>

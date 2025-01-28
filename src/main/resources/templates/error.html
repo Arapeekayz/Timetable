@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <title>In attendance</title>
+    <link rel="stylesheet" href="stylesheet.css">
+</head>
+<body>
+
+<div class="error">
+
+    <img src="/svg/error_icon.svg"><br>
+    <h1>Oops! something went wrong...</h1>
+    <h2>Here are the details for the error:</h2>
+    <p th:text="${error}"></p>
+
+    <div>
+        <a href="http://localhost:8080"
+           class="optionLink"
+           target="_top">
+            <button>Go back home</button>
+        </a>
+    </div>
+
+
+</div>
+</body>
+</html>

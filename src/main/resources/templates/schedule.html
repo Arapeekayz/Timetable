@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule</title>
+    <link rel="stylesheet" href="stylesheet.css">
+
+</head>
+<body>
+
+<div class="innerBody">
+
+    <div class="subHeadingDiv">
+        <h1 class="caption">List of all exams</h1>
+
+    </div>
+
+    <table class="table">
+
+        <colgroup>
+            <col class="column" />
+            <col class="column" />
+            <col class="column" />
+            <col class="column" />
+            <col class="column" />
+            <col class="column" />
+            <col class="column" />
+            <col class="column" />
+            <col class="column" />
+            <col class="column" />
+        </colgroup>
+
+        <thead class="tableRow">
+        <tr>
+            <th class="tableHeader">Date</th>
+            <th class="tableHeader">Time</th>
+            <th class="tableHeader">Exam</th>
+            <th class="tableHeader">Exam Narration</th>
+            <th class="tableHeader">Invigilators</th>
+            <th class="tableHeader">Number of students</th>
+            <th class="tableHeader">Venue</th>
+            <th class="tableHeader">Administrator</th>
+            <th class="tableHeader">In attendance</th>
+            <th class="tableHeader">Actions</th>
+        </tr>
+
+        </thead>
+        <tbody>
+        <tr class="tableRow" th:each="timetableEntity: ${timetableEntities}">
+            <td th:text="${timetableEntity.date}" class="tableText"></td>
+            <td th:text="${timetableEntity.time}" class="tableText"></td>
+            <td th:text="${timetableEntity.exam}" class="tableText"></td>
+            <td th:text="${timetableEntity.examNarration}" class="tableText"></td>
+            <td th:text="${timetableEntity.invigilators}" class="tableText"></td>
+            <td th:text="${timetableEntity.numOfStudents}" class="tableText"></td>
+            <td th:text="${timetableEntity.venue}" class="tableText"></td>
+            <td th:text="${timetableEntity.administrator}" class="tableText"></td>
+            <td th:text="${timetableEntity.inAttendance}" class="tableText"></td>
+
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+</body>
+</html>

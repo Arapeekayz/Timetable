@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Departments</title>
+    <link rel="stylesheet" href="stylesheet.css">
+
+</head>
+<body>
+
+    <div class="innerBody">
+
+        <div class="subHeadingDiv">
+            <h1 class="caption">List of all departments</h1>
+            <button class="addButton" onclick="openCreateDialog()">Add new department</button>
+        </div>
+
+    <table class="table">
+
+            <colgroup>
+                <col class="column" />
+                <col class="column" />
+                <col class="column" />
+                <col class="column" />
+            </colgroup>
+
+            <thead class="tableRow">
+            <tr>
+                <th class="tableHeader" style="width: 0"></th>
+                <th class="tableHeader"  style="width: 65%">Name</th>
+                <th class="tableHeader"  style="width: 35%">Code</th>
+                <th class="tableHeader" style="width: 0">Action</th>
+            </tr>
+
+            </thead>
+            <tbody>
+            <tr class="tableRow" th:each="department: ${departments}" >
+                <td id="deptID" th:text="${department.id}" class="tableText"></td>
+                <td th:text="${department.name}" class="tableText"></td>
+                <td th:text="${department.code}" class="tableText"></td>
+                <td class="tableBox">
+
+                    <a href="#"
+                       th:data-name="${department.name}"
+                       th:data-code="${department.code}"
+                       th:onclick="|openEditDialog(${department.id},this.getAttribute('data-name'),this.getAttribute('data-code'))|"
+                       target="frame"
+                       class="optionLink">
+                        <div class="action">
+                            <img src="/svg/edit_icon.svg">
+                            <h1>Edit</h1>
+                        </div>
+                    </a>
+
+
+
+                    <a th:href="|http://localhost:8080/departments/delete/${department.id}|"
+                       target="frame"
+                       class="optionLink">
+                        <div class="actionDelete">
+                            <img src="/svg/delete_icon.svg">
+                        </div>
+                    </a>
+
+                </td>
+            </tr>
+            </tbody>
+    </table>
+    <dialog id="dialog" class="dialog" style="visibility: collapse">
+
+        <form class="form" action="http://localhost:8080/departments/add_department" method="post" name="submitForm" id="submitForm">
+
+        <h1 class="formHeader">Create new department</h1>
+        <label class="label" for="name">Name</label>
+        <input class="formInput" type="text" id="name" name="name" required><br><br>
+        <label  class="label" for="code">Code</label>
+        <input  class="formInput"  type="text" id="code" name="code" required><br><br>
+        <div class="dialogDiv">
+            <a href="http://localhost:8080/departments">
+                <button class="outlineButton" type="button">Cancel</button>
+            </a>
+            <input  style="grid-column: 2" class="button" type="submit" value="Submit">
+    </div>
+        </form>
+
+
+    </dialog>
+
+    </div>
+
+<script>
+
+    function openEditDialog(id,name,code){
+        document.submitForm.action="http://localhost:8080/departments/update/" + id;
+        document.getElementById('name').value=name;
+        document.getElementById('code').value=code;
+        document.getElementById('dialog').style.visibility='visible';
+
+
+    }
+
+    function openCreateDialog(){
+        document.submitForm.action="http://localhost:8080/departments/add_department";
+        document.getElementById('dialog').style.visibility='visible';
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exams</title>
+    <style>
+
+        .innerBody{
+            width: 100%;
+            height: 100%;
+            display: grid;
+            grid-template-rows: max-content auto;
+            padding: 0px;
+        }
+
+
+        .optionLink{
+            text-decoration: none;
+        }
+
+
+        .tableHeader{
+            font-family: sans-serif;
+            font-size: 12px;
+            padding: 8px 16px;
+            margin: 8px;
+            text-align: start;
+            color: #505050;
+            font-weight: 200;
+        }
+
+        .tableText{
+            font-family: sans-serif;
+            font-size: 14px;
+            padding: 8px 16px
+        }
+
+        .tableRow{
+            border-bottom: #ddd solid 1px;
+            padding: 8px;
+
+        }
+
+        .tableRow:Hover{
+            background: #f8f8f8;
+        }
+
+        .tableBox{
+            display: inline-flex;
+            padding: 8px 16px;
+            width: max-content;
+        }
+
+        .label{
+            font-family: sans-serif;
+            font-size: 10px;
+            width: 100%;
+            color: #252525;
+        }
+
+
+
+        .form{
+            justify-self: center;
+            align-self: center;
+            width: 50vw;
+            max-width: 400px;
+            background-color: white;
+            padding: 40px 80px;
+            border-radius: 40px;
+        }
+
+        .formHeader{
+            width: 100%;
+            margin-bottom: 40px;
+            font-size: 20px;
+            font-weight: 600;
+            font-family: sans-serif;
+            text-align: center;
+        }
+
+        .formInput{
+            border-width: 1px;
+            border-color: #aaa;
+            width: calc(100% - 16px);
+            margin: 0;
+            border-style: solid;
+            padding: 6px 8px;
+            font-family: sans-serif;
+        }
+
+        .selectInput{
+            border-width: 1px;
+            border-color: #aaa;
+            width: 100%;
+            margin: 0 0 16px 0;
+            border-style: solid;
+            padding: 6px 8px;
+            font-family: sans-serif;
+        }
+
+
+        .dialog{
+            width: 100%;
+            height: 95%;
+            position: absolute;
+            top: 0;
+            background: #00000040;
+            border-width: 0;
+            border-radius: 0;
+            display: flex;
+            justify-content: center;
+
+        }
+
+        .dialogDiv{
+            display: grid;
+            width: 100%;
+            height: max-content;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            grid-template-columns: 50% 50%;
+        }
+
+        .button{
+            background-color: #252525;
+            font-family: sans-serif;
+            width: 90%;
+            color: white;
+            padding: 8px;
+            font-size: 12px;
+            margin-left: 10%;
+            align-self: end;
+            transition: 600ms;
+            border-color: transparent;
+        }
+
+        .button:hover{
+            background-color: #808080;
+            border-radius: 4px;
+        }
+
+        .outlineButton{
+            background-color: transparent;
+            border-width: 1px;
+            align-self: start;
+            border-color: #252525;
+            font-family: sans-serif;
+            font-size: 12px;
+            width: 90%;
+            color: #252525;
+            padding: 8px;
+            transition: 600ms;
+        }
+
+        .outlineButton:hover{
+            background-color: #808080;
+            border-color: transparent;
+            color: white;
+            border-radius: 4px;
+        }
+
+        .table{
+            border-collapse: collapse;
+            width: calc(100% - 40px);
+            height: max-content;
+            justify-self: center;
+
+        }
+
+        .column{
+            border: 1px solid #ddd;
+        }
+
+        .subHeadingDiv{
+            display: grid;
+            width: 100%;
+            height: max-content;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            grid-template-columns: 50% 50%;
+            justify-content: center;
+        }
+
+
+
+
+
+
+
+        .dropbtn{
+            padding: 8px;
+            border-color: transparent;
+            border-width: 1px;
+            border-style: solid;
+            background-color: white;
+            width: 16px;
+            height: 16px;
+            justify-self: end;
+        }
+
+        .dropdown{
+            position: relative;
+            display: grid;
+            grid-template-rows: max-content max-content;
+            width: 200px;
+            margin: 0 24px;
+            justify-self: end;
+        }
+
+        .dropdown-content{
+            display: none;
+            position: absolute;
+            z-index: 1;
+            width: 99.5%;
+            margin-top: 2px;
+            grid-row: 2;
+            border-width: 1px;
+            border-color: #cccccc;
+            border-style: solid;
+            background-color: white;
+        }
+
+        .dropdown:hover .dropdown-content{
+            display: block;
+        }
+
+        .dropdown:hover .dropbtn{
+
+            border-color: #cccccc;
+        }
+
+
+        .dropDownItem{
+            display: flex;
+            transition: 300ms;
+            padding: 8px;
+            margin-top: 1px;
+            margin-bottom: 1px;
+        }
+
+
+        .dropDownItem:hover{
+            background-color: #252525;
+            color: white;
+        }
+
+        .dropDownItem button{
+            border-color: transparent;
+            background-color: transparent;
+            font-size: 14px;
+            color: #252525;
+            font-family: sans-serif;
+            font-weight: 200;
+            text-align: start;
+            justify-self: center;
+        }
+
+        .dropDownItem:hover >button{
+            color: white;
+        }
+
+        .dropDownItem img{
+            width: 16px;
+            height: 16px;
+            justify-self: center;
+            align-self: center;
+        }
+
+        .dropDownItem:hover >img{
+            filter: invert(1);
+        }
+
+
+
+
+
+        .error h1{
+            font-family: sans-serif;
+            width: 100%;
+            text-align: center;
+            font-weight: 600;
+            font-size: 16px;
+            color: #252525;
+        }
+
+        .error h2{
+            font-family: sans-serif;
+            font-size: 12px;
+            text-align: center;
+            color: #a0a0a0;
+            font-weight: 200;
+        }
+
+        .error img{
+            width: 100%;
+            height: 64px;
+        }
+
+        .error p{
+            font-family: sans-serif;
+            font-size: 14px;
+            text-align: center;
+            color: #505050;
+        }
+
+        .error div{
+            display: grid;
+            width: 100%;
+            height: max-content;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+
+        .error button{
+            background-color: #252525;
+            font-family: sans-serif;
+            width: 250px;
+            color: white;
+            padding: 8px;
+            font-size: 12px;
+        }
+
+
+
+        .action{
+            display: inline-flex;
+            border-radius: 4px;
+            background-color: #eaeaea;
+            padding: 0 16px;
+            transition: 600ms;
+        }
+
+        .action img{
+            width: 16px;
+            height: 16px;
+            align-self: center;
+            margin-right: 8px;
+        }
+
+        .action h1{
+            font-family: sans-serif;
+            font-size: 12px;
+            text-align: center;
+            font-weight: 600;
+            color: #252525;
+            width: max-content;
+
+        }
+
+        .action:hover{
+            border-radius: 16px;
+            background-color: #505050;
+            padding: 0px 16px;
+        }
+
+        .action:hover >h1{
+            color: white;
+        }
+
+
+        .action:hover >img{
+            filter: invert(1);
+        }
+
+
+
+        .actionDelete{
+            display: inline-flex;
+            border-radius: 4px;
+            background-color: #eaeaea;
+            padding: 7px;
+            margin-left: 16px;
+            transition: 600ms;
+        }
+
+        .actionDelete img{
+            width: 16px;
+            height: 16px;
+            align-self: center;
+        }
+
+        .actionDelete:hover{
+            border-radius: 16px;
+            background-color: #cc0000;
+        }
+
+        .actionDelete:hover >img{
+            filter: invert(1);
+        }
+
+
+
+
+
+
+
+        .searchDiv{
+            display: inline-flex;
+            margin-left: 20px;
+        }
+
+
+
+        .search{
+            display: inline-flex;
+            background-color: transparent;
+            border-radius: 0px 0 0 0px;
+            border-width: 1px 0 1px 1px;
+            border-color: #ddd;
+            border-style: solid;
+            height: 32px;
+            padding: 0 16px;
+            transition: 600ms;
+            width: max-content;
+        }
+
+        .search input{
+            border: none;
+            width: 200px;
+            height: 24px;
+            outline: none;
+            align-self: center;
+            color: #252525;
+            font-family: sans-serif;
+
+        }
+
+        .searchButton{
+            padding: 8px;
+            border-radius: 0 0px 0px 0;
+            background-color: #252525;
+            color: white;
+            padding-left: 16px;
+            padding-right: 16px;
+            font-weight: 400;
+            border: none;
+            outline: none;
+            transition: 600ms;
+        }
+
+        .searchButton:hover{
+            background-color: #505050;
+        }
+    </style>
+
+</head>
+<body>
+
+<div class="innerBody">
+
+    <div class="subHeadingDiv">
+        
+        <div class="dropdown">
+            <img src="/svg/more_icon.svg" class="dropbtn">
+            <div class="dropdown-content">
+                <div class="dropDownItem" onclick="openCreateDialog()">
+                    <img src="/svg/exams_icon.svg">
+                    <button>Add new exam</button>
+                </div>
+                <div class="dropDownItem" onclick="openSettingsDialog()">
+                    <img src="/svg/generate_icon.svg">
+                    <button>Assign staff</button>
+                </div>
+
+                <a href="http://localhost:8080/generate_pdf"
+                   class="optionLink">
+                    <div class="dropDownItem">
+                        <img src="/svg/pdf_icon.svg">
+                        <button>Download as pdf</button>
+                    </div>
+                </a>
+                <div class="dropDownItem"
+                     th:data-emails="${emails}"
+                     th:onclick="|getEmails(this.getAttribute('data-emails'))|">
+                    <img src="/svg/clipboard_icon.svg">
+                    <button>Copy emails to clipboard</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <table class="table">
+
+        <colgroup>
+            <col class="column" />
+            <col class="column" />
+            <col class="column" />
+            <col class="column" />
+            <col class="column" />
+            <col class="column" />
+            <col class="column" />
+            <col class="column" />
+            <col class="column" />
+            <col class="column" />
+        </colgroup>
+
+        <thead class="tableRow">
+        <tr>
+            <th class="tableHeader">Date</th>
+            <th class="tableHeader">Time</th>
+            <th class="tableHeader">Course Code</th>
+            <th class="tableHeader">Course Narration</th>
+            <th class="tableHeader">Duration</th>
+            <th class="tableHeader">Number of students</th>
+            <th class="tableHeader">Venue</th>
+            <th class="tableHeader">Examiner</th>
+        </tr>
+
+        </thead>
+        <tbody>
+        <tr class="tableRow" th:each="examEntity: ${data}">
+            <td th:text="${examEntity.date}" class="tableText"></td>
+            <td th:text="${examEntity.time}" class="tableText"></td>
+            <td th:text="${examEntity.courseCode}" class="tableText"></td>
+            <td th:text="${examEntity.courseNarration}" class="tableText"></td>
+            <td th:text="${examEntity.duration}" class="tableText"></td>
+            <td th:text="${examEntity.numOfStudents}" class="tableText"></td>
+            <td th:text="${examEntity.venue}" class="tableText"></td>
+            <td th:text="${examEntity.examiner}" class="tableText"></td>
+
+
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+<script>
+
+    window.history.forward();
+
+
+
+</script>
+</body>
+</html>
