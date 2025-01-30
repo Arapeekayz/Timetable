@@ -11,10 +11,8 @@ public class InvigilatorAssigner {
     private final ArrayList<Course> courses = new ArrayList<>();
     private final ArrayList<Exam> exams = new ArrayList<>();
     private final ArrayList<Invigilator> invigilators = new ArrayList<>();
-
     private final ArrayList<Invigilator> allInvigilators = new ArrayList<>();
     private final ArrayList<InvigilatorRoaster> invigilatorRoasters = new ArrayList<>();
-
     int maxCount;
 
     public InvigilatorAssigner(
@@ -26,99 +24,50 @@ public class InvigilatorAssigner {
         this.courses.addAll(courses);
         this.exams.addAll(exams);
         this.allInvigilators.addAll(invigilators);
-
         Collections.shuffle(this.allInvigilators);
-
         this.invigilators.addAll(allInvigilators);
         this.maxCount = maxCount;
     }
 
-    public ArrayList<InvigilatorRoaster> getInvigilatorRoaster() throws InvalidNumberOfInvigilatorsException {
-        ArrayList<Exam> smallExams = new ArrayList<>();
-
+    public void assignInvigilators() throws InvalidNumberOfInAttendancesException, InvalidNumberOfInvigilatorsException {
         for (Exam exam : exams) {
             if (exam.getNumOfStudents() < 30) {
-                smallExams.add(exam);
-            } else {
-                assignInvigilators(exam);
-            }
-        }
-
-        while (!smallExams.isEmpty()) {
-            Exam exam1 = smallExams.remove(0);
-            Exam exam2 = null;
-
-            for (Exam exam : smallExams) {
-                if (exam1.getNumOfStudents() + exam.getNumOfStudents() <= 30) {
-                    exam2 = exam;
-                    smallExams.remove(exam);
-                    break;
+                Exam combinedExam = findAndCombineExam(exam);
+                if (combinedExam != null) {
+                    assignInvigilatorsToExam(combinedExam);
+                } else {
+                    assignInvigilatorsToExam(exam);
                 }
-            }
-
-            if (exam2 != null) {
-                assignInvigilators(exam1, exam2);
             } else {
-                assignInvigilators(exam1);
+                assignInvigilatorsToExam(exam);
             }
         }
-
-        return invigilatorRoasters;
     }
 
-    private void assignInvigilators(Exam... exams) throws InvalidNumberOfInvigilatorsException {
-        int totalStudents = Arrays.stream(exams).mapToInt(Exam::getNumOfStudents).sum();
-        int requiredInvigilators = Math.floorDiv(totalStudents, maxCount) + 1;
+    private Exam findAndCombineExam(Exam exam) {
+        for (Exam otherExam : exams) {
+            if (otherExam != exam && otherExam.getNumOfStudents() < 30 &&
+                    (exam.getNumOfStudents() + otherExam.getNumOfStudents()) <= 30) {
+                return combineExams(exam, otherExam);
+            }
+        }
+        return null;
+    }
 
-        if (requiredInvigilators > invigilators.size()) {
+    private Exam combineExams(Exam exam1, Exam exam2) {
+        exam1.setNumOfStudents(exam1.getNumOfStudents() + exam2.getNumOfStudents());
+        exams.remove(exam2);
+        return exam1;
+    }
+
+    private void assignInvigilatorsToExam(Exam exam) throws InvalidNumberOfInvigilatorsException {
+        int requiredInvigilators = exam.getNumOfStudents() > 30 ? 2 : 1;
+        if (invigilators.size() < requiredInvigilators) {
             throw new InvalidNumberOfInvigilatorsException();
         }
-
         for (int i = 0; i < requiredInvigilators; i++) {
-            Invigilator invigilator = findInvigilator(getCourseDepartment(Long.parseLong(exams[0].getCourseID())));
-            for (Exam exam : exams) {
-                InvigilatorRoaster invigilatorRoaster = new InvigilatorRoaster(exam.getId(), invigilator.getId());
-                invigilatorRoasters.add(invigilatorRoaster);
-            }
+            Invigilator invigilator = invigilators.remove(0);
+            invigilatorRoasters.add(new InvigilatorRoaster(invigilator.getId(), exam.getId()));
         }
-    }
-
-    private int getNumberOfInvigilationSlots() {
-        int count = 0;
-        for (Exam exam : exams) {
-            count += Math.floorDiv(exam.getNumOfStudents(), maxCount) + 1;
-        }
-        return count;
-    }
-
-    private Invigilator findInvigilator(String department) {
-        int max = Math.floorDiv(getNumberOfInvigilationSlots(), allInvigilators.size()) + 1;
-        for (Invigilator invigilator : invigilators) {
-            var x = invigilatorRoasters.stream().filter(var -> var.getInvigilatorID().equals(invigilator.getId())).toList();
-            if (x.size() <= max) {
-                if (!Objects.equals(invigilator.getDepartment(), department)) {
-                    invigilators.remove(invigilator);
-                    if (invigilators.isEmpty()) {
-                        invigilators.addAll(allInvigilators);
-                    }
-                    return invigilator;
-                }
-            } else {
-                invigilators.remove(invigilator);
-            }
-        }
-
-        Invigilator invigilator = invigilators.get(0);
-        invigilators.remove(invigilator);
-        if (invigilators.isEmpty()) {
-            invigilators.addAll(allInvigilators);
-        }
-
-        return invigilator;
-    }
-
-    private String getCourseDepartment(Long courseID) {
-        var x = courses.stream().filter(var -> var.getId().equals(courseID)).toList();
-        return x.get(0).getDepartment();
     }
 }
