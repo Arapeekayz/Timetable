@@ -6,20 +6,16 @@ import com.app.timetable.Exceptions.InvalidNumberOfInvigilatorsException;
 
 import java.util.*;
 
-
 public class InvigilatorAssigner {
-
 
     private final ArrayList<Course> courses = new ArrayList<>();
     private final ArrayList<Exam> exams = new ArrayList<>();
     private final ArrayList<Invigilator> invigilators = new ArrayList<>();
 
-
     private final ArrayList<Invigilator> allInvigilators = new ArrayList<>();
     private final ArrayList<InvigilatorRoaster> invigilatorRoasters = new ArrayList<>();
 
     int maxCount;
-
 
     public InvigilatorAssigner(
             List<Course> courses,
@@ -35,39 +31,63 @@ public class InvigilatorAssigner {
 
         this.invigilators.addAll(allInvigilators);
         this.maxCount = maxCount;
-
     }
 
-    /*public ArrayList<InvigilatorRoaster> getInvigilatorRoaster() throws InvalidNumberOfInvigilatorsException {
+    public ArrayList<InvigilatorRoaster> getInvigilatorRoaster() throws InvalidNumberOfInvigilatorsException {
+        ArrayList<Exam> smallExams = new ArrayList<>();
 
         for (Exam exam : exams) {
+            if (exam.getNumOfStudents() < 30) {
+                smallExams.add(exam);
+            } else {
+                assignInvigilators(exam);
+            }
+        }
 
-            if (Math.floorDiv(exam.getNumOfStudents(), maxCount) + 1 > invigilators.size()) {
-                throw new InvalidNumberOfInvigilatorsException();
+        while (!smallExams.isEmpty()) {
+            Exam exam1 = smallExams.remove(0);
+            Exam exam2 = null;
+
+            for (Exam exam : smallExams) {
+                if (exam1.getNumOfStudents() + exam.getNumOfStudents() <= 30) {
+                    exam2 = exam;
+                    smallExams.remove(exam);
+                    break;
+                }
             }
 
-            for (int i = 0; i < Math.floorDiv(exam.getNumOfStudents(), maxCount) + 1; i++) {
-                Invigilator invigilator = findInvigilator(getCourseDepartment(Long.parseLong(exam.getCourseID())));
-                InvigilatorRoaster invigilatorRoaster = new InvigilatorRoaster(exam.getId(), invigilator.getId());
-
-                invigilatorRoasters.add(
-                        invigilatorRoaster
-                );
-
+            if (exam2 != null) {
+                assignInvigilators(exam1, exam2);
+            } else {
+                assignInvigilators(exam1);
             }
         }
 
         return invigilatorRoasters;
+    }
 
+    private void assignInvigilators(Exam... exams) throws InvalidNumberOfInvigilatorsException {
+        int totalStudents = Arrays.stream(exams).mapToInt(Exam::getNumOfStudents).sum();
+        int requiredInvigilators = Math.floorDiv(totalStudents, maxCount) + 1;
+
+        if (requiredInvigilators > invigilators.size()) {
+            throw new InvalidNumberOfInvigilatorsException();
+        }
+
+        for (int i = 0; i < requiredInvigilators; i++) {
+            Invigilator invigilator = findInvigilator(getCourseDepartment(Long.parseLong(exams[0].getCourseID())));
+            for (Exam exam : exams) {
+                InvigilatorRoaster invigilatorRoaster = new InvigilatorRoaster(exam.getId(), invigilator.getId());
+                invigilatorRoasters.add(invigilatorRoaster);
+            }
+        }
     }
 
     private int getNumberOfInvigilationSlots() {
         int count = 0;
-
         for (Exam exam : exams) {
             count += Math.floorDiv(exam.getNumOfStudents(), maxCount) + 1;
         }
-
         return count;
     }
 
@@ -82,7 +102,6 @@ public class InvigilatorAssigner {
                         invigilators.addAll(allInvigilators);
                     }
                     return invigilator;
-
                 }
             } else {
                 invigilators.remove(invigilator);
@@ -96,13 +115,10 @@ public class InvigilatorAssigner {
         }
 
         return invigilator;
-
     }
 
     private String getCourseDepartment(Long courseID) {
         var x = courses.stream().filter(var -> var.getId().equals(courseID)).toList();
         return x.get(0).getDepartment();
-
-    }*/
-
+    }
 }
