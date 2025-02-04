@@ -35,6 +35,10 @@ public class ExamController {
     PDFService pdfService;
 
     @Autowired
+    private EmailService emailService;
+
+
+    @Autowired
     private ExamService examService;
 
     @Autowired
@@ -61,69 +65,13 @@ public class ExamController {
     @GetMapping("")
     public String getAllExams(Model model) {
 
-        var cList = courseService.getAllCourses();
-        var vList = venueService.getAllVenues();
-        var aList = administratorService.getAllAdministrators();
-
-
-        model.addAttribute("emails", getEmailsString());
-        model.addAttribute("timetableEntities", getTimetableEntities());
-        model.addAttribute("courses", cList);
-        model.addAttribute("venues", vList);
-        model.addAttribute("administrators", aList);
-        if (!cList.isEmpty()) {
-            model.addAttribute("defaultCourse", cList.get(0).getId());
-        }
-        if (!vList.isEmpty()) {
-            model.addAttribute("defaultVenue", vList.get(0).getId());
-        }
-        if (!aList.isEmpty()) {
-            model.addAttribute("defaultAdministrator", aList.get(0).getId());
-        }
+        var exams = examService.getAllExams();
+        model.addAttribute("exams", exams);
 
         return "exams.html";
 
     }
 
-    /*@PostMapping("/search")
-    public String getIndividualExams(String email, Model model) {
-
-        Map<String, Long> map = getType(email);
-        if (map != null) {
-            if (Objects.equals(new ArrayList<>(map.keySet()).get(0), INVIGILATOR_TYPE)) {
-                model.addAttribute("timetableEntities", getInvigilatorTimetable(map.get(INVIGILATOR_TYPE)));
-            } else if (Objects.equals(new ArrayList<>(map.keySet()).get(0), IN_ATTENDANCE_TYPE)) {
-                model.addAttribute("timetableEntities", getInAttendanceTimetable(map.get(IN_ATTENDANCE_TYPE)));
-            } else if (Objects.equals(new ArrayList<>(map.keySet()).get(0), ADMINISTRATOR_TYPE)) {
-                model.addAttribute("timetableEntities", getAdministratorTimetable(map.get(ADMINISTRATOR_TYPE)));
-            }
-        } else {
-            model.addAttribute("timetableEntities", new ArrayList<TimetableEntity>());
-        }
-
-        var cList = courseService.getAllCourses();
-        var vList = venueService.getAllVenues();
-        var aList = administratorService.getAllAdministrators();
-
-
-        model.addAttribute("courses", cList);
-        model.addAttribute("venues", vList);
-        model.addAttribute("administrators", aList);
-        model.addAttribute("emailAddress", email);
-        if (!cList.isEmpty()) {
-            model.addAttribute("defaultCourse", cList.get(0).getId());
-        }
-        if (!vList.isEmpty()) {
-            model.addAttribute("defaultVenue", vList.get(0).getId());
-        }
-        if (!aList.isEmpty()) {
-            model.addAttribute("defaultAdministrator", aList.get(0).getId());
-        }
-
-        return "exams.html";
-
-    }
-*/
     @PostMapping("/add_exam")
     public RedirectView createExam(@ModelAttribute Exam exam) {
         examService.createExam(exam);
@@ -149,38 +97,15 @@ public class ExamController {
         return redirectView;
     }
 
-    /*@GetMapping(value = "/generate_pdf/{email}")
-    public ResponseEntity<byte[]> convertToPDF(@PathVariable String email) throws DocumentException, IOException {
+    @GetMapping("/send-emails")
+    public RedirectView sendEmails() {
+        
+        emailService.sendEmailsToAll();
 
-        Map<String, Long> map = getType(email);
-        byte[] bytes;
-
-        if (map != null) {
-            if (Objects.equals(new ArrayList<>(map.keySet()).get(0), INVIGILATOR_TYPE)) {
-                bytes = pdfService.generatePDFFromHTML(TimetableHTMLGenerator.generateHTML(getInvigilatorTimetable(map.get(INVIGILATOR_TYPE)), new ArrayList<>(map.keySet()).get(0)));
-
-            } else if (Objects.equals(new ArrayList<>(map.keySet()).get(0), IN_ATTENDANCE_TYPE)) {
-                bytes = pdfService.generatePDFFromHTML(TimetableHTMLGenerator.generateHTML(getInAttendanceTimetable(map.get(IN_ATTENDANCE_TYPE)), new ArrayList<>(map.keySet()).get(0)));
-
-            } else if (Objects.equals(new ArrayList<>(map.keySet()).get(0), ADMINISTRATOR_TYPE)) {
-                bytes = pdfService.generatePDFFromHTML(TimetableHTMLGenerator.generateHTML(getAdministratorTimetable(map.get(ADMINISTRATOR_TYPE)), new ArrayList<>(map.keySet()).get(0)));
-
-            } else {
-                bytes = pdfService.generatePDFFromHTML(TimetableHTMLGenerator.generateHTML(getTimetableEntities(), "Generated timetable"));
-
-            }
-        } else {
-            bytes = pdfService.generatePDFFromHTML(TimetableHTMLGenerator.generateHTML(getTimetableEntities(), "Generated timetable"));
-        }
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData("filename", "output.pdf");
-        headers.setContentLength(bytes.length);
-        return new ResponseEntity<>(bytes, headers, HttpStatus.OK);
-
+        RedirectView redirectView = new RedirectView();
+        redirectView.setUrl("http://localhost:8080/exams");
+        return redirectView;
     }
-    */
 
     @PostMapping("/uploadPDF")
     public RedirectView handleFileUpload(@RequestParam("file") MultipartFile file) throws IOException {
@@ -230,9 +155,6 @@ public class ExamController {
         var invigilatorRoasters = invigilatorRoasterService.getAllInvigilatorRoasters();
         var inAttendanceRoasters = inattendanceRoasterService.getAllInAttendanceRoasters();
 
-//        exams.sort(Comparator.comparing(Exam::getTime));
-//        exams.sort(Comparator.comparing(Exam::getDate));
-
 
         ArrayList<TimetableEntity> timetables = new ArrayList<>();
         for (Exam exam : exams) {
@@ -268,127 +190,7 @@ public class ExamController {
         return timetables;
     }
 
-    /*private ArrayList<TimetableEntity> getInvigilatorTimetable(Long id) {
 
-        var invigilatorRoasters = invigilatorRoasterService.getAllInvigilatorRoasters();
-        var inAttendanceRoasters = inattendanceRoasterService.getAllInAttendanceRoasters();
-
-        ArrayList<Exam> exams = new ArrayList<>();
-
-        List<InvigilatorRoaster> roasters = invigilatorRoasterService.getAllInvigilatorRoasters().stream().filter(var -> var.getInvigilatorID().equals(id)).toList();
-
-        for (InvigilatorRoaster invigilatorRoaster : roasters) {
-            exams.add(examService.getExamById(invigilatorRoaster.getExam()));
-        }
-
-        exams.sort(Comparator.comparing(Exam::getTime));
-        exams.sort(Comparator.comparing(Exam::getDate));
-
-
-        ArrayList<TimetableEntity> timetables = new ArrayList<>();
-        for (Exam exam : exams) {
-            Course course = courseService.getCourseById(Long.parseLong(exam.getCourseID()));
-            Venue venue = venueService.getVenueById(Long.parseLong(exam.getVenue()));
-
-            StringBuilder invigilatorsList = new StringBuilder();
-            StringBuilder inAttendanceList = new StringBuilder();
-
-            for (InvigilatorRoaster invigilatorRoaster : invigilatorRoasters.stream().filter(var -> var.getExam().equals(exam.getId())).toList()) {
-                Invigilator inv = invigilatorService.getInvigilatorById(invigilatorRoaster.getInvigilatorID());
-                invigilatorsList.append(inv.getName()).append(" ").append(inv.getSurname()).append(", ");
-            }
-
-            for (InAttendanceRoaster inAttendanceRoaster : inAttendanceRoasters.stream().filter(var -> var.getExam().equals(exam.getId())).toList()) {
-                InAttendance inAttendance = inAttendanceService.getInAttendanceById(inAttendanceRoaster.getInAttendanceID());
-                inAttendanceList.append(inAttendance.getName()).append(" ").append(inAttendance.getSurname()).append(", ");
-            }
-
-            Administrator administrator = administratorService.getAdministratorById(Long.parseLong(exam.getAdministrator()));
-
-            timetables.add(new TimetableEntity(exam.getDate(), exam.getTime(), course.getCode(), course.getName(), invigilatorsList.toString(), Integer.toString(exam.getNumOfStudents()), venue.getName(), administrator.getName() + " " + administrator.getSurname(), inAttendanceList.toString(), ""));
-        }
-
-        return timetables;
-
-    }
-
-    private ArrayList<TimetableEntity> getInAttendanceTimetable(Long id) {
-        var invigilatorRoasters = invigilatorRoasterService.getAllInvigilatorRoasters();
-        var inAttendanceRoasters = inattendanceRoasterService.getAllInAttendanceRoasters();
-
-        ArrayList<Exam> exams = new ArrayList<>();
-
-        List<InAttendanceRoaster> roasters = inattendanceRoasterService.getAllInAttendanceRoasters().stream().filter(var -> var.getInAttendanceID().equals(id)).toList();
-
-        for (InAttendanceRoaster inAttendanceRoaster : roasters) {
-            exams.add(examService.getExamById(inAttendanceRoaster.getExam()));
-        }
-
-        exams.sort(Comparator.comparing(Exam::getTime));
-        exams.sort(Comparator.comparing(Exam::getDate));
-
-
-        ArrayList<TimetableEntity> timetables = new ArrayList<>();
-        for (Exam exam : exams) {
-            Course course = courseService.getCourseById(Long.parseLong(exam.getCourseID()));
-            Venue venue = venueService.getVenueById(Long.parseLong(exam.getVenue()));
-
-            StringBuilder invigilatorsList = new StringBuilder();
-            StringBuilder inAttendanceList = new StringBuilder();
-
-            for (InvigilatorRoaster invigilatorRoaster : invigilatorRoasters.stream().filter(var -> var.getExam().equals(exam.getId())).toList()) {
-                Invigilator inv = invigilatorService.getInvigilatorById(invigilatorRoaster.getInvigilatorID());
-                invigilatorsList.append(inv.getName()).append(" ").append(inv.getSurname()).append(", ");
-            }
-
-            for (InAttendanceRoaster inAttendanceRoaster : inAttendanceRoasters.stream().filter(var -> var.getExam().equals(exam.getId())).toList()) {
-                InAttendance inAttendance = inAttendanceService.getInAttendanceById(inAttendanceRoaster.getInAttendanceID());
-                inAttendanceList.append(inAttendance.getName()).append(" ").append(inAttendance.getSurname()).append(", ");
-            }
-
-            Administrator administrator = administratorService.getAdministratorById(Long.parseLong(exam.getAdministrator()));
-
-            timetables.add(new TimetableEntity(exam.getDate(), exam.getTime(), course.getCode(), course.getName(), invigilatorsList.toString(), Integer.toString(exam.getNumOfStudents()), venue.getName(), administrator.getName() + " " + administrator.getSurname(), inAttendanceList.toString(), ""));
-        }
-
-        return timetables;
-    }
-
-    private ArrayList<TimetableEntity> getAdministratorTimetable(Long id) {
-
-        var invigilatorRoasters = invigilatorRoasterService.getAllInvigilatorRoasters();
-        var inAttendanceRoasters = inattendanceRoasterService.getAllInAttendanceRoasters();
-
-        List<Exam> exams = examService.getAllExams().stream().filter(var -> Long.parseLong(var.getAdministrator()) == id).toList();
-
-
-        ArrayList<TimetableEntity> timetables = new ArrayList<>();
-        for (Exam exam : exams) {
-            Course course = courseService.getCourseById(Long.parseLong(exam.getCourseID()));
-            Venue venue = venueService.getVenueById(Long.parseLong(exam.getVenue()));
-
-            StringBuilder invigilatorsList = new StringBuilder();
-            StringBuilder inAttendanceList = new StringBuilder();
-
-            for (InvigilatorRoaster invigilatorRoaster : invigilatorRoasters.stream().filter(var -> var.getExam().equals(exam.getId())).toList()) {
-                Invigilator inv = invigilatorService.getInvigilatorById(invigilatorRoaster.getInvigilatorID());
-                invigilatorsList.append(inv.getName()).append(" ").append(inv.getSurname()).append(", ");
-            }
-
-            for (InAttendanceRoaster inAttendanceRoaster : inAttendanceRoasters.stream().filter(var -> var.getExam().equals(exam.getId())).toList()) {
-                InAttendance inAttendance = inAttendanceService.getInAttendanceById(inAttendanceRoaster.getInAttendanceID());
-                inAttendanceList.append(inAttendance.getName()).append(" ").append(inAttendance.getSurname()).append(", ");
-            }
-
-            Administrator administrator = administratorService.getAdministratorById(Long.parseLong(exam.getAdministrator()));
-
-            timetables.add(new TimetableEntity(exam.getDate(), exam.getTime(), course.getCode(), course.getName(), invigilatorsList.toString(), Integer.toString(exam.getNumOfStudents()), venue.getName(), administrator.getName() + " " + administrator.getSurname(), inAttendanceList.toString(), ""));
-        }
-
-        return timetables;
-
-    }
-*/
     private String getEmailsString(){
         StringBuilder emails = new StringBuilder();
         for(Invigilator invigilator : invigilatorService.getAllInvigilators()) {

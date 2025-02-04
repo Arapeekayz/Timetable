@@ -1,6 +1,10 @@
 package com.app.timetable.Entity;
 
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class TimetableEntity {
 
     private String date;
@@ -121,6 +125,11 @@ public class TimetableEntity {
 
     public void setExamID(String examID) {
         this.examID = examID;
+    }
+
+    public Date getExamDate() throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM yyyy");
+        return formatter.parse(getDate());
     }
 }
 

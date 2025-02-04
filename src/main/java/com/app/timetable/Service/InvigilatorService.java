@@ -31,8 +31,6 @@ public class InvigilatorService {
         if (existingInvigilator != null) {
             existingInvigilator.setName(invigilator.getName());
             existingInvigilator.setSurname(invigilator.getSurname());
-            existingInvigilator.setTitle(invigilator.getTitle());
-            existingInvigilator.setDepartment(invigilator.getDepartment());
             return invigilatorRepository.save(existingInvigilator);
         } else {
             return null;

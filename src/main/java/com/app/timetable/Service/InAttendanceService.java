@@ -32,7 +32,6 @@ public class InAttendanceService {
         if (existingInAttendance != null) {
             existingInAttendance.setName(inAttendance.getName());
             existingInAttendance.setSurname(inAttendance.getSurname());
-            existingInAttendance.setTitle(inAttendance.getTitle());
             return inAttendanceRepository.save(existingInAttendance);
         } else {
             return null;

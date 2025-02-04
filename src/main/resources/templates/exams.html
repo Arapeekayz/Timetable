@@ -6,6 +6,16 @@
     <title>Exams</title>
     <style>
 
+
+        .caption{
+            font-family: sans-serif;
+            font-size: 16px;
+            margin: 8px 24px;
+            text-align: start;
+            font-weight: 600;
+            align-content: start;
+        }
+
         .innerBody {
             width: 100%;
             height: 100%;
@@ -182,91 +192,6 @@
             justify-content: center;
         }
 
-
-        .dropbtn {
-            padding: 8px;
-            border-color: transparent;
-            border-width: 1px;
-            border-style: solid;
-            background-color: white;
-            width: 16px;
-            height: 16px;
-            justify-self: end;
-        }
-
-        .dropdown {
-            position: relative;
-            display: grid;
-            grid-template-rows: max-content max-content;
-            width: 200px;
-            margin: 0 24px;
-            justify-self: end;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            z-index: 1;
-            width: 99.5%;
-            margin-top: 2px;
-            grid-row: 2;
-            border-width: 1px;
-            border-color: #cccccc;
-            border-style: solid;
-            background-color: white;
-        }
-
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        .dropdown:hover .dropbtn {
-
-            border-color: #cccccc;
-        }
-
-
-        .dropDownItem {
-            display: flex;
-            transition: 300ms;
-            padding: 8px;
-            margin-top: 1px;
-            margin-bottom: 1px;
-        }
-
-
-        .dropDownItem:hover {
-            background-color: #252525;
-            color: white;
-        }
-
-        .dropDownItem button {
-            border-color: transparent;
-            background-color: transparent;
-            font-size: 14px;
-            color: #252525;
-            font-family: sans-serif;
-            font-weight: 200;
-            text-align: start;
-            justify-self: center;
-        }
-
-        .dropDownItem:hover > button {
-            color: white;
-        }
-
-        .dropDownItem img {
-            width: 16px;
-            height: 16px;
-            justify-self: center;
-            align-self: center;
-        }
-
-        .dropDownItem:hover > img {
-            filter: invert(1);
-        }
-
-
         .error h1 {
             font-family: sans-serif;
             width: 100%;
@@ -381,10 +306,10 @@
             filter: invert(1);
         }
 
-
         .uploadDiv {
             display: inline-flex;
-            margin-left: 20px;
+            justify-self: end;
+            margin-right: 20px;
         }
 
 
@@ -435,50 +360,24 @@
 
     <div class="subHeadingDiv">
 
+        <h1 class="caption">List of all exams from file</h1>
+
         <form class="uploadDiv" action="http://localhost:8080/exams/uploadPDF" enctype="multipart/form-data"
               method="post">
             <div class="upload">
                 <label for="file" id="fileLabel">Select file to upload</label>
-                <input type="file" placeholder="Select file" name="file" id="file" multiple onchange="changeFileText()" style="display: none;" >
+                <input type="file" placeholder="Select file" name="file" id="file" multiple onchange="changeFileText()"
+                       style="display: none;">
             </div>
             <input type="submit" value="Upload" class="uploadButton">
         </form>
 
-        <div class="dropdown">
-            <img src="/svg/more_icon.svg" class="dropbtn">
-            <div class="dropdown-content">
-                <div class="dropDownItem" onclick="openCreateDialog()">
-                    <img src="/svg/exams_icon.svg">
-                    <button>Add new exam</button>
-                </div>
-                <div class="dropDownItem" onclick="openSettingsDialog()">
-                    <img src="/svg/generate_icon.svg">
-                    <button>Assign staff</button>
-                </div>
-
-                <a href="http://localhost:8080/generate_pdf"
-                   class="optionLink">
-                    <div class="dropDownItem">
-                        <img src="/svg/pdf_icon.svg">
-                        <button>Download as pdf</button>
-                    </div>
-                </a>
-                <div class="dropDownItem"
-                     th:data-emails="${emails}"
-                     th:onclick="|getEmails(this.getAttribute('data-emails'))|">
-                    <img src="/svg/clipboard_icon.svg">
-                    <button>Copy emails to clipboard</button>
-                </div>
-            </div>
-        </div>
 
     </div>
 
     <table class="table">
 
         <colgroup>
-            <col class="column"/>
-            <col class="column"/>
             <col class="column"/>
             <col class="column"/>
             <col class="column"/>
@@ -500,37 +399,33 @@
             <th class="tableHeader">Number of students</th>
             <th class="tableHeader">Venue</th>
             <th class="tableHeader">Examiner</th>
-            <th class="tableHeader">Invigilators</th>
-            <th class="tableHeader">In attendance</th>
             <th class="tableHeader">Actions</th>
         </tr>
 
         </thead>
         <tbody>
-        <tr class="tableRow" th:each="timetableEntity: ${timetableEntities}">
-            <td th:text="${timetableEntity.date}" class="tableText"></td>
-            <td th:text="${timetableEntity.time}" class="tableText"></td>
-            <td th:text="${timetableEntity.course}" class="tableText"></td>
-            <td th:text="${timetableEntity.courseNarration}" class="tableText"></td>
-            <td th:text="${timetableEntity.duration}" class="tableText"></td>
-            <td th:text="${timetableEntity.numOfStudents}" class="tableText"></td>
-            <td th:text="${timetableEntity.venue}" class="tableText"></td>
-            <td th:text="${timetableEntity.examiner}" class="tableText"></td>
-            <td th:text="${timetableEntity.invigilator}" class="tableText"></td>
-            <td th:text="${timetableEntity.inAttendance}" class="tableText"></td>
+        <tr class="tableRow" th:each="exam: ${exams}">
+            <td th:text="${exam.date}" class="tableText"></td>
+            <td th:text="${exam.time}" class="tableText"></td>
+            <td th:text="${exam.courseCode}" class="tableText"></td>
+            <td th:text="${exam.courseNarration}" class="tableText"></td>
+            <td th:text="${exam.duration}" class="tableText"></td>
+            <td th:text="${exam.numOfStudents}" class="tableText"></td>
+            <td th:text="${exam.venue}" class="tableText"></td>
+            <td th:text="${exam.examiner}" class="tableText"></td>
             <td class="tableBox">
 
                 <a href="#"
-                   th:data-date="${timetableEntity.date}"
-                   th:data-time="${timetableEntity.time}"
-                   th:data-course="${timetableEntity.course}"
-                   th:data-courseNarration="${timetableEntity.courseNarration}"
-                   th:data-duration="${timetableEntity.duration}"
-                   th:data-numOfStudents="${timetableEntity.numOfStudents}"
-                   th:data-venue="${timetableEntity.venue}"
-                   th:data-examiner="${timetableEntity.examiner}"
-                   th:data-examID="${timetableEntity.examID}"
-                   th:onclick="|openEditDialog(this.getAttribute('data-date'),this.getAttribute('data-time'),this.getAttribute('data-course'),this.getAttribute('data-courseNarration'),this.getAttribute('data-duration'),this.getAttribute('data-numOfStudents'),this.getAttribute('data-venue'),this.getAttribute('data-venue'))|"
+                   th:data-date="${exam.date}"
+                   th:data-time="${exam.time}"
+                   th:data-course="${exam.courseCode}"
+                   th:data-courseNarration="${exam.courseNarration}"
+                   th:data-duration="${exam.duration}"
+                   th:data-numOfStudents="${exam.numOfStudents}"
+                   th:data-venue="${exam.venue}"
+                   th:data-examiner="${exam.examiner}"
+                   th:data-examID="${exam.id}"
+                   th:onclick="|openEditDialog(this.getAttribute('data-date'),this.getAttribute('data-time'),this.getAttribute('data-course'),this.getAttribute('data-courseNarration'),this.getAttribute('data-duration'),this.getAttribute('data-numOfStudents'),this.getAttribute('data-venue'),this.getAttribute('data-examiner'),this.getAttribute('data-examID'))|"
                    target="frame"
                    class="optionLink">
                     <div class="action">
@@ -540,7 +435,7 @@
                 </a>
 
 
-                <a th:href="|http://localhost:8080/exams/delete/${timetableEntity.examID}|"
+                <a th:href="|http://localhost:8080/exams/delete/${exam.id}|"
                    target="frame"
                    class="optionLink">
                     <div class="actionDelete">
@@ -554,43 +449,37 @@
         </tr>
         </tbody>
     </table>
+
     <dialog id="dialog" class="dialog" style="visibility: collapse">
 
         <form name="submitForm" id="submitForm" class="form" method="post">
 
             <h1 class="formHeader">Create new exam</h1>
 
-            <input class="formInput" type="hidden" id="courseID" name="courseID" th:value="${defaultCourse}" required>
-
-            <label class="label" for="course">Course</label>
-            <select onchange="setCourse()" id="course" class="selectInput">
-                <option th:each="course:${courses}" th:value="${course.id}" th:text="${course.name}"></option>
-            </select>
-
-            <label class="label" for="numOfStudents">number of students</label>
-            <input class="formInput" type="number" id="numOfStudents" name="numOfStudents" min="1" required><br><br>
-
             <label class="label" for="date">date</label>
-            <input class="formInput" type="date" id="date" name="date" required><br><br>
+            <input class="formInput" type="text" id="date" name="date" required><br><br>
 
             <label class="label" for="time">time</label>
-            <input class="formInput" type="time" id="time" name="time" required><br><br>
+            <input class="formInput" type="text" id="time" name="time" required><br><br>
 
-            <input class="formInput" type="hidden" id="administrator" name="administrator"
-                   th:value="${defaultAdministrator}" required>
+            <label class="label" for="courseCode">course code</label>
+            <input class="formInput" type="text" id="courseCode" name="courseCode" required>
 
-            <label class="label" for="admin">Administrator</label>
-            <select onchange="setAdministrator()" id="admin" class="selectInput">
-                <option th:each="administrator:${administrators}" th:value="${administrator.id}"
-                        th:text="${administrator.name}"></option>
-            </select>
+            <label class="label" for="courseNarration">course narration</label>
+            <input class="formInput" type="text" id="courseNarration" name="courseNarration" required>
 
-            <input class="formInput" type="hidden" id="venue" name="venue" th:value="${defaultVenue}" required>
+            <label class="label" for="duration">duration in hours</label>
+            <input class="formInput" type="text" id="duration" name="duration" required>
 
-            <label class="label" for="ven">Venue</label>
-            <select onchange="setVenue()" id="ven" class="selectInput">
-                <option th:each="venue:${venues}" th:value="${venue.id}" th:text="${venue.name}"></option>
-            </select>
+            <label class="label" for="numOfStudents">num of students</label>
+            <input class="formInput" type="number" id="numOfStudents" name="numOfStudents" min="1" required>
+
+            <label class="label" for="venue">venue</label>
+            <input class="formInput" type="text" id="venue" name="venue" required>
+
+            <label class="label" for="examiner">examiner</label>
+            <input class="formInput" type="text" id="examiner" name="examiner" required>
+
 
             <div class="dialogDiv">
                 <a href="http://localhost:8080/exams">
@@ -599,29 +488,6 @@
                 <input style="grid-column: 2" class="button" type="submit" value="Submit">
             </div>
 
-        </form>
-
-
-    </dialog>
-
-    <dialog id="mDialog" class="dialog" style="visibility: collapse">
-
-
-        <form class="form" action="http://localhost:8080/assign_staff" method="post">
-
-            <h1 class="formHeader">Application settings</h1>
-            <label class="label" for="maxInvigilators">Max number of students per invigilator</label>
-            <input class="formInput" type="number" id="maxInvigilators" name="maxInvigilators" value="30"
-                   required><br><br>
-            <label class="label" for="maxInAttendance">Max number of students per in attendance staff</label>
-            <input class="formInput" type="number" id="maxInAttendance" name="maxInAttendance" value="30"
-                   required><br><br>
-            <div class="dialogDiv">
-                <a href="http://localhost:8080/exams">
-                    <button class="outlineButton" type="button">Cancel</button>
-                </a>
-                <input style="grid-column: 2" class="button" type="submit" value="Submit">
-            </div>
         </form>
 
 
@@ -633,63 +499,29 @@
 
     window.history.forward();
 
-    function openEditDialog(id, course, numOfStudents, date, time, administrator, venue) {
+    function openEditDialog(date,time,course,courseNarration,duration,numOfStudents,venue,examiner,examID) {
 
-        if (document.getElementById('courseID').value === "") {
-            alert("You need to create at least 1 course before creating an exam");
-        } else if (document.getElementById('venue').value === "") {
-            alert("You need to create at least 1 venue before creating an exam");
-        } else if (document.getElementById('administrator').value === "") {
-            alert("You need to create at least 1 administrator before creating an exam");
-        } else {
-            document.submitForm.action = "http://localhost:8080/exams/update/" + id;
-            document.getElementById('numOfStudents').value = numOfStudents;
-            document.getElementById('date').value = date;
-            document.getElementById('time').value = time;
-            for (let i = 0; i < document.getElementById('course').options.length; i++) {
-                if (document.getElementById('course').options[i].text === course) {
-                    document.getElementById('course').selectedIndex = i;
-                    break;
-                }
-            }
-            for (let i = 0; i < document.getElementById('admin').options.length; i++) {
-                if (document.getElementById('admin').options[i].text === administrator) {
-                    document.getElementById('admin').selectedIndex = i;
-                    break;
-                }
-            }
-            for (let i = 0; i < document.getElementById('ven').options.length; i++) {
-                if (document.getElementById('ven').options[i].text === venue) {
-                    document.getElementById('ven').selectedIndex = i;
-                    break;
-                }
-            }
-            document.getElementById('dialog').style.visibility = 'visible';
-        }
+        document.submitForm.action = "http://localhost:8080/exams/update/" + examID;
+
+        document.getElementById('date').value = date;
+        document.getElementById('time').value = time;
+        document.getElementById('courseCode').value = course;
+        document.getElementById('courseNarration').value = courseNarration;
+        document.getElementById('duration').value = duration;
+        document.getElementById('numOfStudents').value = numOfStudents;
+        document.getElementById('venue').value = venue;
+        document.getElementById('examiner').value = examiner;
+
+        document.getElementById('dialog').style.visibility = 'visible';
+
 
     }
 
-    function openSettingsDialog() {
-        document.getElementById('mDialog').style.visibility = 'visible';
+    function changeFileText() {
+
+        document.getElementById('fileLabel').innerHTML = document.getElementById('file').files.item(0).name;
+
     }
-
-
-    function setType() {
-        document.getElementById('type').value = document.getElementById('types').value;
-    }
-
-
-    function getEmails(emails) {
-        navigator.clipboard.writeText(emails);
-
-        alert("Emails copied to clipboard");
-    }
-
-    function changeFileText () {
-
-        document.getElementById('fileLabel').innerHTML=document.getElementById('file').files.item(0).name;
-
-    };
 
 </script>
 </body>

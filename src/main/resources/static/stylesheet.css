@@ -629,18 +629,18 @@
 
 
 
-.searchDiv{
+.uploadDiv {
     display: inline-flex;
-    margin-left: 24px;
+    justify-self: end;
+    margin-right: 20px;
 }
 
 
-
-.search{
+.upload {
     display: inline-flex;
     background-color: transparent;
-    border-radius: 8px;
-    border-width: 1px;
+    border-radius: 0px 0 0 0px;
+    border-width: 1px 0 1px 1px;
     border-color: #ddd;
     border-style: solid;
     height: 32px;
@@ -649,52 +649,89 @@
     width: max-content;
 }
 
-.search:hover{
-    border-radius: 16px;
-}
-
-.search input{
-    border: none;
-    width: 200px;
-    height: 24px;
-    outline: none;
-    align-self: center;
-    color: #252525;
-    font-family: sans-serif;
-
-}
-
-.search select{
+.upload label {
     border: none;
     width: 120px;
-    height: 28px;
-    outline: none;
+    font-size: 12px;
     align-self: center;
     color: #252525;
     font-family: sans-serif;
 }
 
-.search div{
-    height: calc(100% - 12px);
-    width: 1px;
-    margin: 4px;
-    background-color: #ddd;
-    align-self: center;
-}
-
-.searchButton{
-    border-radius: 8px;
+.uploadButton {
+    padding: 8px;
+    border-radius: 0 0px 0px 0;
     background-color: #252525;
     color: white;
     padding-left: 16px;
     padding-right: 16px;
+    font-weight: 400;
     border: none;
     outline: none;
-    font-weight: 400;
-    margin: 0 16px;
     transition: 600ms;
 }
 
-.searchButton:hover{
-    border-radius: 16px;
+.uploadButton:hover {
+    background-color: #505050;
 }
+
+
+
+
+
+
+
+
+
+.dashboardGrid{
+    display: inline-flex;
+    grid-template-columns: 25% 25% 25% 25%;
+    margin: 8px 20px 24px;
+    justify-self: center;
+}
+
+
+
+
+.dashboardButton{
+    background-color: transparent;
+    border-color: #eaeaea;
+    border-width: 1px;
+    border-style: solid;
+    font-size: 12px;
+    font-family: sans-serif;
+    display: inline-flex;
+    outline: none;
+    transition: 600ms;
+    margin-right: 16px;
+}
+
+.dashboardButton img{
+    width: 16px;
+    height: 16px;
+    align-self: center;
+    margin-right: 8px;
+    margin-left: 16px;
+}
+
+.dashboardButton h1{
+    font-family: sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: #252525;
+    margin-right: 16px;
+}
+
+.dashboardButton:hover{
+    background-color: #252525;
+}
+
+.dashboardButton:hover >h1{
+    color: white;
+}
+
+
+.dashboardButton:hover >img{
+    filter: invert(1);
+}
+

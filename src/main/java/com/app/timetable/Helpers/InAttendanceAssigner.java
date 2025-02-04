@@ -30,17 +30,17 @@ public class InAttendanceAssigner {
 
     }
 
-/*
+
 
     public ArrayList<InAttendanceRoaster> getInAttendances() throws InvalidNumberOfInAttendancesException {
         int count=0;
         for (Exam exam : exams) {
 
-            if(Math.floorDiv(exam.getNumOfStudents(), maxCount)+1>inAttendances.size()) {
+            if(Math.floorDiv(Integer.parseInt(exam.getNumOfStudents()), maxCount)+1>inAttendances.size()) {
                 throw new InvalidNumberOfInAttendancesException();
             }
 
-            for (int i = 0; i < Math.floorDiv(exam.getNumOfStudents(), maxCount) + 1; i++) {
+            for (int i = 0; i < Math.floorDiv(Integer.parseInt(exam.getNumOfStudents()), maxCount) + 1; i++) {
                 InAttendance inAttendance = inAttendances.get(count);
                 inAttendanceRoasters.add(
                         new InAttendanceRoaster(exam.getId(), inAttendance.getId())
@@ -55,6 +55,6 @@ public class InAttendanceAssigner {
 
         return inAttendanceRoasters;
     }
-*/
+
 
 }

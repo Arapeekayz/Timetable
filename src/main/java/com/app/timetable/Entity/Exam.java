@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
@@ -28,6 +30,7 @@ public class Exam {
     private String numOfStudents;
     private String venue;
     private String examiner;
+
 
     public Exam() {
         // Default constructor
@@ -101,5 +104,6 @@ public class Exam {
     public void setExaminer(String examiner) {
         this.examiner = examiner;
     }
+
 }
 

@@ -30,11 +30,18 @@ public class TimetableHTMLGenerator {
                 
                 .caption{
                     font-family: sans-serif;
+                    text-align: center;
+                    font-family: sans-serif;
+                    font-weight: 800;
+                    margin: 8px 24px;
+                }
+                .subHeadingStyle{
+                    font-family: sans-serif;
+                    text-align: center;
+                    font-family: sans-serif;
+                    font-weight: 600;
                     font-size: 16px;
                     margin: 8px 24px;
-                    text-align: start;
-                    font-weight: 600;
-                    align-content: start;
                 }
                 
                 .tableHeader{
@@ -104,6 +111,9 @@ public class TimetableHTMLGenerator {
                     
                 
                         <h1 class="caption">
+                        Harare Institute of Technology
+                        </h1>
+                        <h1 class="subHeadingStyle">
                         """+
                         title+
                         """
@@ -120,17 +130,21 @@ public class TimetableHTMLGenerator {
                                 <col />
                                 <col />
                                 <col />
+                                <col />
+                                <col />
                             </colgroup>
                 
                             <thead class="tableRow">
                             <tr>
                                 <th class="tableHeader">Date</th>
                                 <th class="tableHeader">Time</th>
-                                <th class="tableHeader">Exam</th>
-                                <th class="tableHeader">Invigilators</th>
+                                <th class="tableHeader">Course code</th>
+                                <th class="tableHeader">Code narration</th>
+                                <th class="tableHeader">Duration</th>
                                 <th class="tableHeader">Number of students</th>
                                 <th class="tableHeader">Venue</th>
-                                <th class="tableHeader">Administrator</th>
+                                <th class="tableHeader">Examiner</th>
+                                <th class="tableHeader">Invigilators</th>
                                 <th class="tableHeaderLast">In attendance</th>
                             </tr>
                 
@@ -181,6 +195,14 @@ public class TimetableHTMLGenerator {
             rows.append("""
                     <td class="tableText">
                     """);
+            rows.append(timetable.getCourseNarration());
+            rows.append("""
+                    </td>
+                    """);
+
+            rows.append("""
+                    <td class="tableText">
+                    """);
             rows.append(timetable.getDuration());
             rows.append("""
                     </td>
@@ -211,9 +233,17 @@ public class TimetableHTMLGenerator {
                     """);
 
             rows.append("""
-                    <td class="tableTextLast">
+                    <td class="tableText">
                     """);
             rows.append(timetable.getInvigilator());
+            rows.append("""
+                    </td>
+                    """);
+
+            rows.append("""
+                    <td class="tableTextLast">
+                    """);
+            rows.append(timetable.getInAttendance());
             rows.append("""
                     </td>
                     """);

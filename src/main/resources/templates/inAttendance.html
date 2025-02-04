@@ -13,13 +13,20 @@
 
         <div class="subHeadingDiv">
             <h1 class="caption">List of all in attendance</h1>
-            <button class="addButton" onclick="openCreateDialog()">Add new in attendance</button>
+            <form class="uploadDiv" action="http://localhost:8080/in_attendances/upload" enctype="multipart/form-data"
+                  method="post">
+                <div class="upload">
+                    <label for="file" id="fileLabel">Select file to upload</label>
+                    <input type="file" placeholder="Select file" name="file" id="file" multiple onchange="changeFileText()"
+                           style="display: none;">
+                </div>
+                <input type="submit" value="Upload" class="uploadButton">
+            </form>
         </div>
 
     <table class="table">
 
             <colgroup>
-                <col class="column" />
                 <col class="column" />
                 <col class="column" />
                 <col class="column" />
@@ -32,7 +39,6 @@
                 <th class="tableHeader" style="width: 0"></th>
                 <th class="tableHeader" style="width: 40%">Name</th>
                 <th class="tableHeader" style="width: 40%">Surname</th>
-                <th class="tableHeader" style="width: 20%">Title</th>
                 <th class="tableHeader" style="width: 20%">Email</th>
                 <th class="tableHeader" style="width: 0">Action</th>
             </tr>
@@ -43,16 +49,14 @@
                     <td th:text="${in_attendance.id}" class="tableText"></td>
                     <td th:text="${in_attendance.name}" class="tableText"></td>
                     <td th:text="${in_attendance.surname}" class="tableText"></td>
-                    <td th:text="${in_attendance.title}" class="tableText"></td>
                     <td th:text="${in_attendance.email}" class="tableText"></td>
                     <td class="tableBox">
 
                         <a href="#"
                            th:data-name="${in_attendance.name}"
                            th:data-surname="${in_attendance.surname}"
-                           th:data-title="${in_attendance.title}"
                            th:data-email="${in_attendance.email}"
-                           th:onclick="|openEditDialog(${in_attendance.id},this.getAttribute('data-name'),this.getAttribute('data-surname'),this.getAttribute('data-title'),this.getAttribute('data-email'))|"
+                           th:onclick="|openEditDialog(${in_attendance.id},this.getAttribute('data-name'),this.getAttribute('data-surname'),this.getAttribute('data-email'))|"
 
                            target="frame"
                            class="optionLink">
@@ -85,8 +89,6 @@
         <input class="formInput" type="text" id="name" name="name" required><br><br>
         <label  class="label" for="surname">Surname</label>
         <input  class="formInput"  type="text" id="surname" name="surname" required><br><br>
-        <label  class="label" for="title">Title</label>
-        <input  class="formInput"  type="text" id="title" name="title" required><br><br>
             <label  class="label" for="email">Email</label>
             <input  class="formInput"  type="email" id="email" name="email" required><br><br>
         <div class="dialogDiv">
@@ -104,21 +106,21 @@
 
 <script>
 
-    function openEditDialog(id,name,surname,title,email){
+    function openEditDialog(id,name,surname,email){
         document.submitForm.action="http://localhost:8080/in_attendances/update/" + id;
         document.getElementById('name').value=name;
         document.getElementById('surname').value=surname;
-        document.getElementById('title').value=title;
         document.getElementById('email').value=email;
         document.getElementById('dialog').style.visibility='visible';
 
+    }
+
+    function changeFileText() {
+
+        document.getElementById('fileLabel').innerHTML = document.getElementById('file').files.item(0).name;
 
     }
 
-    function openCreateDialog(){
-        document.submitForm.action="http://localhost:8080/in_attendances/add_in_attendance";
-        document.getElementById('dialog').style.visibility='visible';
-    }
 </script>
 </body>
 </html>

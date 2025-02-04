@@ -264,7 +264,6 @@ public class PDFTableStripper extends PDFTextStripper
                 min=box.getMinY();
             }
         }
-        System.out.println("min: "+min);
         return min;
     }
 
@@ -276,7 +275,6 @@ public class PDFTableStripper extends PDFTextStripper
                 max=box.getMaxY();
             }
         }
-        System.out.println("max: "+max);
         return max;
     }
 
